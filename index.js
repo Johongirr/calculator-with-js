@@ -4,6 +4,7 @@ const html = document.documentElement;
 const warningMessageBox = document.querySelector(".calculator__warning-message");
 const allButtons = document.querySelectorAll("button");
 const digits = document.querySelectorAll(".calculator__operand-btn");
+const notification = document.querySelector(".notification");
 
 const dotBtn = document.querySelector(".calculator__dot-btn");
 
@@ -84,13 +85,7 @@ const divide = (num1, num2)=>{
         return num1 / num2;
     }
 }
-const mutliply = (num1, num2) => {
-    if(isBothNumbersAreFloats(num1, num2)){
-        return (num1 * 10 * num2 * 10) / 10;
-    }  else {  
-        return num1 * num2;
-    }
-};
+const mutliply = (num1, num2) => num1 * num2;
 const modulo = (num1, num2)=>{  
     if((num1 == 0 && num2 == 0) || num2 == 0){
         displayWarningMessage(num1, "can't be modulod by 0");
@@ -334,6 +329,14 @@ const addFloatingPointNumbers = (e)=>{
         }
     } 
 }
+const removeNotification = ()=>{
+    notification.style = "transform: translate3d(0,-300%,0)";
+}
+const notifyUser = ()=>{
+    notification.style = "transform: translate3d(0,0,0)";
+    const notificationCancelBtn = notification.querySelector(".notification__cancel");
+    notificationCancelBtn.addEventListener("click", removeNotification);
+}
 themeChangerBtns.forEach(btn => btn.addEventListener("click", changeTheme));
 
 clearScreenBtns.clearBtn.addEventListener("click", clearScreen);
@@ -368,6 +371,7 @@ digits.forEach(digit => {
     window.addEventListener("keyup", populateDigit);
 })
 
+window.addEventListener("DOMContentLoaded", notifyUser);
 
 
  
