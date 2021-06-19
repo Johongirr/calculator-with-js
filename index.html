@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Calculator App</title>
+</head>
+<body>
+    <main class="main">
+        <div class="main__container">
+            <section class="calculator">
+                <section class="calculator__screen">
+                    <div class="calculator__warning-message">
+                        Maximum digits allowed are 15
+                        <span class="calculator__warning-message-cancel">
+                            x
+                        </span>
+                    </div>
+                    <div class="calculator__modes">
+                        <div class="calculator__modes-box">
+                            <button class="calculator__theme-btn calculator__day-mode active">
+                                <i class="far fa-sun calculator__day-icon" ></i>
+                            </button>
+                            <button class="calculator__theme-btn calculator__night-mode">
+                                <i class="fas fa-moon calculator__night-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calculator__operations-box">
+                        <div class="calculator__current-operator">
+                             
+                        </div>
+                        <div class="calculator__current-operand">
+                            
+                        </div>
+                    </div>
+                </section>
+                <section class="calculator__controls">
+                    <button data-clear="c" class="btn  calculator__clear-btn">C</button>
+                    <button data-modulo="%" class="btn calculator__operator-btn calculator__modulo-btn">%</button>
+                    <button data-multiply="*" class="btn calculator__operator-btn calculator__multiply-btn">*</button>
+                    <button data-divide="/" class="btn calculator__operator-btn calculator__divide-btn">/</button>
+                    <button data-operand="7" class="btn calculator__operand-btn">7</button>
+                    <button data-operand="8" class="btn calculator__operand-btn">8</button>
+                    <button data-operand="9" class="btn calculator__operand-btn">9</button>
+                    <button data-add="+" class="btn calculator__operator-btn calculator__add-btn">+</button>
+                    <button data-operand="4" class="btn calculator__operand-btn">4</button>
+                    <button data-operand="5" class="btn calculator__operand-btn">5</button>
+                    <button data-operand="6" class="btn calculator__operand-btn">6</button>
+                    <button data-substract="-" class="btn calculator__operator-btn calculator__substract-btn">-</button>
+                    <button data-operand="1" class="btn calculator__operand-btn">1</button>
+                    <button data-operand="2" class="btn calculator__operand-btn">2</button>
+                    <button data-operand="3" class="btn calculator__operand-btn">3</button>
+                    <button data-calculate="=" class="btn calculator__calculate-btn">=</button>
+                    <button data-dot="." class="btn calculator__dot-btn">.</button>
+                    <button data-operand="0" class="btn calculator__operand-btn">0</button>
+                    <button data-erase="x" class="btn calculator__erase-btn">
+                        <i class="fas fa-backspace"></i>
+                    </button>
+                </section>
+            </section>
+        </div>
+    </main>
+
+    <script src="index.js" defer></script>
+</body>
+</html>
