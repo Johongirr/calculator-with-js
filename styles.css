@@ -51,6 +51,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 button {
     border: 0;
@@ -87,8 +88,10 @@ button {
     border-radius: inherit;
     right: 0;
     display: flex;
-    padding: 1rem;
+    justify-content: center;
     align-items: center;
+    padding: 1rem;
+    
     background-color: var(--calculator-controls-color);
     border-radius: 1rem;
     color: var(--btns-color-day-mode);
@@ -245,12 +248,13 @@ button {
     border-radius: 50%;
 }
 .btn:not(.calculator__calculate-btn)::before {
-    box-shadow: -.03rem -.03rem .1rem rgba(255,255,255,.3);
+    box-shadow: -.03rem -.03rem .2rem rgba(255,255,255,.4);
 }
 .btn:not(.calculator__calculate-btn)::after {
     transition: var(--transition-gen);
-    box-shadow: .1rem .1rem .1rem rgba(0,0,0,.3);
+    box-shadow: .1rem .1rem .2rem rgba(0,0,0,.3);
 }
+
 
 /* media queires */
 @media(max-width: 360px){

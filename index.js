@@ -1,4 +1,4 @@
-// All necessary dom nodes are selected
+
 const themeChangerBtns = document.querySelectorAll(".calculator__theme-btn");
 const html = document.documentElement;
 const warningMessageBox = document.querySelector(".calculator__warning-message");
@@ -47,11 +47,12 @@ const resetResults = ()=>{
     operation = [];
 }
 const isBothNumbersAreFloats = (num1, num2)=>{
-    return Number.isInteger(num1) && Number.isInteger(num2);
+    return !Number.isInteger(num1) && !Number.isInteger(num2);
 }
-const displayWarningMessage = ()=>{
+const displayWarningMessage = (num1, message)=>{
+    console.log(warningMessageBox, 'warning message');
     warningMessageBox.style = "transform: translate3d(0,0,0)";
-    warningMessageBox.textContent = `${num1} can't be divided by 0`;
+    warningMessageBox.textContent = `${num1} ${message}`;
     disableAllOtherButtons();
     setTimeout(() => {
         warningMessageBox.style = "transform: translate3d(300%,0,0)";
@@ -61,38 +62,38 @@ const displayWarningMessage = ()=>{
         
 }
 const add = (num1, num2) => {
-    if(!isBothNumbersAreFloats(num1, num2)){
+    if(isBothNumbersAreFloats(num1, num2)){
         return (num1 * 10 + num2 * 10) / 10;
     } else {
         return num1 + num2;
     }
 };
 const substract = (num1, num2) => {
-    if(!isBothNumbersAreFloats(num1, num2)){
+    if(isBothNumbersAreFloats(num1, num2)){
         return (num1 * 10 - num2 * 10) / 10;
     } else {
         return num1 - num2;
     }
 };
 const divide = (num1, num2)=>{
-    if(num2 == 0){
-        displayWarningMessage();
+    console.log(isBothNumbersAreFloats(num1, num2), num1, num2, num1*num2, (num1 * 10 * num2 * 10) / 10, 'hhhheeerre');
+    if(isBothNumbersAreFloats(num1,)){
+        displayWarningMessage(num1, "can't be divied by 0");
         return 'INVALID';
     } else {
         return num1 / num2;
     }
 }
 const mutliply = (num1, num2) => {
-    if(!isBothNumbersAreFloats(num1, num2)){
+    if(isBothNumbersAreFloats(num1, num2)){
         return (num1 * 10 * num2 * 10) / 10;
-    }  else {
-        console.log('heree')
+    }  else {  
         return num1 * num2;
     }
 };
 const modulo = (num1, num2)=>{  
     if((num1 == 0 && num2 == 0) || num2 == 0){
-        displayWarningMessage();
+        displayWarningMessage(num1, "can't be modulod by 0");
         return 'INVALID';
     } else {
         return num1 % num2;
@@ -167,6 +168,18 @@ const eraseCurrentCharacter = (e)=>{
         }
     }
 }
+const clearOperationArray = ()=>{
+    operation = [];
+}
+const updateScreenWithOperationResult = (operationResult, operator)=>{
+    currentOperatation.textContent = operationResult;
+    currentOperand.textContent = operationResult;
+    currentOperatation.textContent += operator;   
+}
+const updateOperationArray = (operator)=>{
+    operation[0]= currentOperand.textContent.trim();
+    operation[1] = operator; 
+}
 const addNumbers = (e)=>{
     if((e.type === "keyup" && e.key === "+") || (e.type === "click" && e.target.dataset.add === "+")){
         if(operation.length === 0){
@@ -178,94 +191,43 @@ const addNumbers = (e)=>{
             operation[1] = "+";
         } else if(operation.length === 3){
             const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            isAdded = true;
-            operation = [];
-            operation[0]= currentOperand.textContent.trim();
-            operation[1] = "+";
-            currentOperatation.textContent += "+"        
+            updateScreenWithOperationResult(operationResult, "+");
+            clearOperationArray(operation);
+            updateOperationArray("+")
+            isAdded = true;    
         }
     }
-    // } else if(e.type === "click" && e.target.dataset.add === "+"){
-    //     if(operation.length === 0){
-    //         currentOperatation.textContent = "0 +";
-    //         operation[0] = "0";
-    //         operation[1] = "+";
-    //     } else if(operation.length === 1){
-    //         currentOperatation.textContent += `${operation[0]} +`;
-    //         operation[1] = "+";
-    //     } else if(operation.length === 3){
-    //         const operationResult  =  operate(operation[1], operation[0], operation[2]);
-    //         currentOperatation.textContent = operationResult;
-    //         currentOperand.textContent = operationResult;
-    //         operation=  [];
-    //         operation[0]=currentOperand.textContent.trim();
-    //         operation[1] = "+";
-    //         currentOperatation.textContent += "+"
-    //     }
-    // }
 }
 const trimCurrentOperand = ()=>{
   return  currentOperand.textContent.trim();
 }
-const updateOperation = (e)=>{
+const updateOperand = (e)=>{
     if(currentOperand.textContent.trim().length >= 15)return;
-    currentOperand.textContent += e.key;
+    currentOperand.textContent += e.type === "keyup" ? e.key : e.target.dataset.operand;
 }
-const populateArray = (e)=>{
-     
+const populateArray = (e)=>{   
     if(operation.length <= 1){
-        updateOperation(e);
+        updateOperand(e);
         operation[0] = trimCurrentOperand();
     } else if(operation.length === 2){
-      
-        currentOperand.textContent = e.key;
+        currentOperand.textContent = e.type === "keyup" ? e.key : e.target.dataset.operand; 
         operation[2] = trimCurrentOperand();
     } else if(isAdded){
-         updateOperation(e);
+         updateOperand(e);
          operation[2] = trimCurrentOperand();
-         
          isAdded = false;
     } else {   
-        updateOperation(e);
+        updateOperand(e);
         operation[2] = trimCurrentOperand();
     }
 }
 const populateDigit = (e)=>{
-    if(e.type === "keyup"){
-        if(e.key.match(/[0-9]/)) {
-           if(currentOperand.textContent.trim().length >= 15){
-                populateArray(e) 
-                return;
-           } else {
-               populateArray(e);
-               return;
-           }  
-            
-        }
-    } else if(e.type === "click"){
-        const digit = e.target.dataset.operand;
-        if(currentOperand.textContent.trim().length >= 15 ){
-            return;
-        }
-        if(operation.length <= 1){
-            currentOperand.textContent += digit;
-            operation[0] = currentOperand.textContent.trim();
-        } else if(operation.length === 2){
-            currentOperand.textContent = digit;
-            operation[2] = currentOperand.textContent.trim();
-        } else {
-            currentOperand.textContent += digit;
-            operation[2] = currentOperand.textContent.trim();
-        }
-         
-    }
-    console.log(operation)
+    if(e.type === "keyup" && e.key.match(/[0-9]/) || (e.type === "click" && e.target.dataset.operand.match(/[0-9]/))){
+        populateArray(e)
+    }  
 }
 const substractNumbers = (e)=>{
-    if(e.type === "keyup" && e.key === "-"){
-        
+    if((e.type === "keyup" && e.key === "-") || (e.type === "click" && e.target.dataset.substract === "-")){   
         if(operation.length === 0){
             currentOperatation.textContent = "0 -";
             operation[0] = "0";
@@ -275,36 +237,14 @@ const substractNumbers = (e)=>{
             operation[1] = "-";
         } else if(operation.length === 3){
             const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            isAdded = true;
-            operation = [];
-            operation[0]= currentOperand.textContent.trim();
-            operation[1] = "-";
-            currentOperatation.textContent += "-"        
-        }
-    } else if(e.type === "click" && e.target.dataset.add === "-"){
-        if(operation.length === 0){
-            currentOperatation.textContent = "0 -";
-            operation[0] = "0";
-            operation[1] = "-";
-        } else if(operation.length === 1){
-            currentOperatation.textContent += `${operation[0]} -`;
-            operation[1] = "-";
-        } else if(operation.length === 3){
-            const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            operation=  [];
-            operation[0]=currentOperand.textContent.trim();
-            operation[1] = "-";
-            currentOperatation.textContent += "-"
+            updateScreenWithOperationResult(operationResult, "-");
+            clearOperationArray(operation);
+            updateOperationArray("-") 
         }
     }
 }
 const divideNumbers = (e)=>{
-    if(e.type === "keyup" && e.key === "/"){
-        
+    if((e.type === "keyup" && e.key === "/") || (e.type === "click" && e.target.dataset.divide === "/")){    
         if(operation.length === 0){
             currentOperatation.textContent = "0 /";
             operation[0] = "0";
@@ -314,39 +254,17 @@ const divideNumbers = (e)=>{
             operation[1] = "/";
         } else if(operation.length === 3){
             const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            if(operationResult === "INVALID"){
-                return;
+            if(operationResult !== "INVALID"){
+                updateScreenWithOperationResult(operationResult, "/");
+                clearOperationArray();
+                updateOperationArray("/") 
             }
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            isAdded = true;
-            operation = [];
-            operation[0]= currentOperand.textContent.trim();
-            operation[1] = "/";
-            currentOperatation.textContent += "/"        
-        }
-    } else if(e.type === "click" && e.target.dataset.add === "/"){
-        if(operation.length === 0){
-            currentOperatation.textContent = "0 /";
-            operation[0] = "0";
-            operation[1] = "/";
-        } else if(operation.length === 1){
-            currentOperatation.textContent += `${operation[0]} /`;
-            operation[1] = "/";
-        } else if(operation.length === 3){
-            const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            operation=  [];
-            operation[0]=currentOperand.textContent.trim();
-            operation[1] = "/";
-            currentOperatation.textContent += "/"
         }
     }
 }
 
 const moduloNumbers = (e)=>{
-    if(e.type === "keyup" && e.key === "%"){   
+    if((e.type === "keyup" && e.key === "%") || (e.type === "click" && e.target.dataset.modulo === "%")){   
         if(operation.length === 0){
             currentOperatation.textContent = "0 %";
             operation[0] = "0";
@@ -356,39 +274,17 @@ const moduloNumbers = (e)=>{
             operation[1] = "%";
         } else if(operation.length === 3){
             const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            if(operationResult === "INVALID"){
-                return;
-            }
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            isAdded = true;
-            operation = [];
-            operation[0]= currentOperand.textContent.trim();
-            operation[1] = "%";
-            currentOperatation.textContent += "%"        
-        }
-    } else if(e.type === "click" && e.target.dataset.add === "%"){
-        if(operation.length === 0){
-            currentOperatation.textContent = "0 %";
-            operation[0] = "0";
-            operation[1] = "%";
-        } else if(operation.length === 1){
-            currentOperatation.textContent += `${operation[0]} %`;
-            operation[1] = "%";
-        } else if(operation.length === 3){
-            const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            operation=  [];
-            operation[0]=currentOperand.textContent.trim();
-            operation[1] = "%";
-            currentOperatation.textContent += "%"
+            if(operationResult !== "INVALID"){
+                updateScreenWithOperationResult(operationResult, "%");
+                clearOperationArray();
+                updateOperationArray("%") 
+            }       
         }
     }
 }
 
 const mutliplyNumbers = (e)=>{
-    if(e.type === "keyup" && e.key === "*"){   
+    if((e.type === "keyup" && e.key === "*") || (e.type === "click" && e.target.dataset.multiply === "*")){   
         if(operation.length === 0){
             currentOperatation.textContent = "0 *";
             operation[0] = "0";
@@ -398,38 +294,14 @@ const mutliplyNumbers = (e)=>{
             operation[1] = "*";
         } else if(operation.length === 3){
             const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            console.log(operation[1], 'in multiplication')
-            isAdded = true;
-            operation = [];
-            operation[0]= currentOperand.textContent.trim();
-
-            operation[1] = "*";
-            currentOperatation.textContent += "*"        
-        }
-    } else if(e.type === "click" && e.target.dataset.add === "*"){
-        if(operation.length === 0){
-            currentOperatation.textContent = "0 *";
-            operation[0] = "0";
-            operation[1] = "*";
-        } else if(operation.length === 1){
-            currentOperatation.textContent += `${operation[0]} *`;
-            operation[1] = "*";
-        } else if(operation.length === 3){
-            const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            operation=  [];
-            operation[0]=currentOperand.textContent.trim();
-            operation[1] = "*";
-            currentOperatation.textContent += "*"
+            updateScreenWithOperationResult(operationResult, '*');
+            clearOperationArray();
+            updateOperationArray("*") 
         }
     }
 }
-const calculate = (e)=>{
-     
-    if(e.type === "keyup" && (e.key === "=" || e.key === "Enter")){
+const calculate = (e)=>{     
+    if((e.type === "keyup" && (e.key === "=" || e.key === "Enter")) || (e.type === "click" && e.target.dataset.calculate === "=")){
         if(operation.length !== 3){
             warningMessageBox.style = "transform:translate3d(0,0,0)";
             warningMessageBox.textContent = "You can't calculate with single operand and operator";
@@ -441,38 +313,13 @@ const calculate = (e)=>{
         } else if(operation.length){
             const operator = operation[1];
             const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            isAdded = true;
-            operation = [];
-            operation[0]= currentOperand.textContent.trim();
-            operation[1] = operator;
-            currentOperatation.textContent += operator;
-        }
-    } else if(e.type === "click" && e.target.dataset.calculate === "="){
-        if(operation.length !== 3){
-            warningMessageBox.style = "transform:translate3d(0,0,0)";
-            warningMessageBox.textContent = "You can't calculate with (0)1231 or single operand and operator";
-            disableAllOtherButtons();
-            setTimeout(() => {
-                warningMessageBox.style = "transform:translate3d(300%,0,0)";
-                enableAllOtherButtons();
-            }, 3000);
-        } else if(operation.length){
-            const operator = operation[1];
-            const operationResult  =  operate(operation[1], operation[0], operation[2]);
-            currentOperatation.textContent = operationResult;
-            currentOperand.textContent = operationResult;
-            isAdded = true;
-            operation = [];
-            operation[0]= currentOperand.textContent.trim();
-            operation[1] = operator;
-            currentOperatation.textContent += operator;
+            updateScreenWithOperationResult(operationResult, operator);
+            clearOperationArray();
+            updateOperationArray(operator);
         }
     }
 }
 const addFloatingPointNumbers = (e)=>{
-    console.log(e.key)
     if((e.type === "keyup" && e.key === ".") || (e.type === "click" && e.target.dataset.dot === ".")){
         if(operation.length === 1){
             if(!operation[0].includes(".")) {
@@ -487,8 +334,6 @@ const addFloatingPointNumbers = (e)=>{
         }
     } 
 }
-
-
 themeChangerBtns.forEach(btn => btn.addEventListener("click", changeTheme));
 
 clearScreenBtns.clearBtn.addEventListener("click", clearScreen);
