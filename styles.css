@@ -13,15 +13,17 @@
     --operator-bg-color-day-mode: hsl(294, 60%, 88%);
     --clear-btn-bg-color-day-mode: orange;
     --btns-bg-color-day-mode: #ebe7e7;
-    --calculator-color-day-mode: #fff;
-    --body-bg-color-day-mode: linear-gradient(hsl(0, 2%, 92%), hsl(0, 0%, 95%));
+    --calculator-color-day-mode: #7feddb;
+    --body-bg-color-day-mode: linear-gradient(45deg, #74dcf7, #4cc4e4);
     --operation-color-day-mode: #222;
     --calculator-modes-box: rgba(80, 45, 45, 0.1);
     --btns-color-day-mode: #111;
-    --calculator-controls-color: hsl(0, 5%, 75%);
+    --calculator-controls-color: linear-gradient(hsl(170, 62%, 46%), hsl(170, 62%, 36%));
     --operator-text-color: purple;
     --calculator-active-theme-color: rgb(49, 49, 49);
-
+    --operand-color: #7d00ff;
+    /* #fff whole calc color */
+    /* hsl(0, 5%, 75%) claculator buttons container */
     --transition-gen: all  .3s ease-in-out;
 }
 
@@ -38,6 +40,7 @@
     --calculator-controls-color: hsl(0, 0%, 9%);
     --operator-text-color: #fff;
     --calculator-active-theme-color: #fff;
+    --operand-color: #fff;
 
     --transition-gen: all  .3s ease-in-out;
 }
@@ -139,13 +142,15 @@ button {
 }
 .calculator .calculator__current-operator {
     font-size: .8rem;
+    color: var(--operand-color);
 }
 .calculator .calculator__current-operand {
     font-size: 1.5rem;
     font-weight: 600;
+    color: var(--operand-color);
 }
 .calculator .calculator__controls {
-    background-color: var(--calculator-controls-color);
+    background: var(--calculator-controls-color);
     width: 350px;
     padding: 1rem;
     display: grid;
@@ -217,7 +222,8 @@ button {
 
     /* btns */
 .btn {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 600;
     justify-self: center;
 }
 .btn:focus {
