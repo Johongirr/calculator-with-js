@@ -14,11 +14,11 @@
     --clear-btn-bg-color-day-mode: orange;
     --btns-bg-color-day-mode: #ebe7e7;
     --calculator-color-day-mode: #fff;
-    --body-bg-color-day-mode: linear-gradient(rgb(228, 227, 227), rgb(212, 212, 212));
+    --body-bg-color-day-mode: linear-gradient(hsl(0, 2%, 92%), hsl(0, 0%, 95%));
     --operation-color-day-mode: #222;
     --calculator-modes-box: rgba(80, 45, 45, 0.1);
     --btns-color-day-mode: #111;
-    --calculator-controls-color: hsl(0, 5%, 80%);
+    --calculator-controls-color: hsl(0, 5%, 75%);
     --operator-text-color: purple;
     --calculator-active-theme-color: rgb(49, 49, 49);
 
@@ -141,7 +141,7 @@ button {
     font-size: .8rem;
 }
 .calculator .calculator__current-operand {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 600;
 }
 .calculator .calculator__controls {
@@ -225,8 +225,8 @@ button {
 }
 .btn:not(.calculator__calculate-btn) {
     position: relative;
-    width: 4rem;
-    height: 3.5rem;
+    width: 4.5rem;
+    height: 4rem;
     border-radius: 50%;
     transition: var(--transition-gen);
     transform: translateY(-3px);

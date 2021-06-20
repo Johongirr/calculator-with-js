@@ -78,7 +78,7 @@ const substract = (num1, num2) => {
 };
 const divide = (num1, num2)=>{
     console.log(isBothNumbersAreFloats(num1, num2), num1, num2, num1*num2, (num1 * 10 * num2 * 10) / 10, 'hhhheeerre');
-    if(isBothNumbersAreFloats(num1,)){
+    if(num2 == 0){
         displayWarningMessage(num1, "can't be divied by 0");
         return 'INVALID';
     } else {
@@ -202,8 +202,22 @@ const updateOperand = (e)=>{
 }
 const populateArray = (e)=>{   
     if(operation.length <= 1){
-        updateOperand(e);
-        operation[0] = trimCurrentOperand();
+        const digit = e.type === "keyup" ? e.key : e.target.dataset.operand;
+        /**
+         *  If first character is 0 and second character is not dot don't do a thing
+         *  else populate array
+         * 
+         * 
+         */
+        if(trimCurrentOperand()[0] == 0 && trimCurrentOperand()[1] != "."){
+            currentOperand.textContent = "";
+            operation[0] = "";
+        }
+         
+         updateOperand(e);
+         operation[0] = trimCurrentOperand();
+        console.log('in heeere', operation)
+        
     } else if(operation.length === 2){
         currentOperand.textContent = e.type === "keyup" ? e.key : e.target.dataset.operand; 
         operation[2] = trimCurrentOperand();
@@ -212,6 +226,7 @@ const populateArray = (e)=>{
          operation[2] = trimCurrentOperand();
          isAdded = false;
     } else {   
+        //console.log(operation)
         updateOperand(e);
         operation[2] = trimCurrentOperand();
     }
@@ -317,12 +332,12 @@ const calculate = (e)=>{
 const addFloatingPointNumbers = (e)=>{
     if((e.type === "keyup" && e.key === ".") || (e.type === "click" && e.target.dataset.dot === ".")){
         if(operation.length === 1){
-            if(!operation[0].includes(".")) {
+            if(!operation[0].includes(".") && operation[0].match(/[0-9]/)) {
                 currentOperand.textContent +=".";
                 operation[0] = operation[0] + ".";
             }
         } else if(operation.length === 3){
-            if(!operation[2].includes(".")) {
+            if(!operation[2].includes(".") && operation[2].match(/[0-9]/)) {
                 currentOperand.textContent +=".";
                 operation[2] = operation[2] + ".";
             }
@@ -335,6 +350,9 @@ const removeNotification = ()=>{
 const notifyUser = ()=>{
     notification.style = "transform: translate3d(0,0,0)";
     const notificationCancelBtn = notification.querySelector(".notification__cancel");
+    setTimeout(() => {
+        notification.style = "transform: translate3d(0,-300%,0)";
+    }, 4000);
     notificationCancelBtn.addEventListener("click", removeNotification);
 }
 themeChangerBtns.forEach(btn => btn.addEventListener("click", changeTheme));
