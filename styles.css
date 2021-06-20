@@ -21,7 +21,8 @@
     --calculator-controls-color: linear-gradient(hsl(170, 62%, 46%), hsl(170, 62%, 36%));
     --operator-text-color: purple;
     --calculator-active-theme-color: rgb(49, 49, 49);
-    --operand-color: #7d00ff;
+    --operand-color: #333;
+    --warning-message-color: rgb(51, 51, 51, .7);
     /* #fff whole calc color */
     /* hsl(0, 5%, 75%) claculator buttons container */
     --transition-gen: all  .3s ease-in-out;
@@ -41,6 +42,7 @@
     --operator-text-color: #fff;
     --calculator-active-theme-color: #fff;
     --operand-color: #fff;
+    --warning-message-color: #fff;
 
     --transition-gen: all  .3s ease-in-out;
 }
@@ -95,9 +97,9 @@ button {
     align-items: center;
     padding: 1rem;
     
-    background-color: var(--calculator-controls-color);
+    background-color: var(--warning-message-color);
     border-radius: 1rem;
-    color: var(--btns-color-day-mode);
+    color: var(--btns-bg-color-day-mode);
     z-index: 111;
     transition: var(--transition-gen);
     transform: translate3d(300%, 0, 0);
